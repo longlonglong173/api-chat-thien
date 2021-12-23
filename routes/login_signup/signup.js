@@ -23,12 +23,12 @@ function check(phonenumber, password) {
 }
 
 // GET ALL POST
-router.get('/', async(req, res) => {
+router.get('/', async (req, res) => {
     res.json('api signup');
 });
 
 // SIGNUP A ACCOUNT
-router.post('/', async(req, res) => {
+router.post('/', async (req, res) => {
     try {
         const reqPhonenumber = req.body.phonenumber;
         const reqPassword = req.body.password;
@@ -65,14 +65,14 @@ router.post('/', async(req, res) => {
         const token = jwt.sign(dataToken, process.env.ACCESS_TOKEN_KEY, {
             // expiresIn: '1h',
         });
+        const userList = await User.find();
         const newUser = await new User({
             phonenumber: req.body.phonenumber,
             password: req.body.password,
             id: uuidv4(),
             token: token,
             avatar: '',
-            username: req.body.username,
-            role: req.body.role,
+            username: `User-${userList.length}`,
         });
         await newUser.save();
         return res.json({
